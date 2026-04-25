@@ -1,0 +1,206 @@
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard — SmartFood{% endblock %}
+{% block content %}
+<!-- Welcome Header -->
+<div class="page-header flex-between">
+    <div>
+        <h2>Admin Overview 📊</h2>
+        <p class="page-subtitle">Complete system analytics and management controls.</p>
+    </div>
+    <div class="page-header-actions">
+        <a href="/dashboard/canteen/" class="btn btn-secondary"><i class="bi bi-shop me-1"></i>Canteen View</a>
+        <a href="/waste/log/" class="btn btn-primary"><i class="bi bi-plus-circle me-1"></i>Log Waste</a>
+    </div>
+</div>
+
+<!-- Row 1: Key Metrics -->
+<div class="grid-4 mb-4">
+    <div class="stat-card">
+        <div class="stat-icon icon-primary"><i class="bi bi-calendar-check-fill"></i></div>
+        <div class="stat-content">
+            <div class="stat-value">{{ total_bookings }}</div>
+            <div class="stat-label">Total Bookings</div>
+            <div class="stat-detail">{{ today_bookings }} today</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon icon-danger"><i class="bi bi-trash-fill"></i></div>
+        <div class="stat-content">
+            <div class="stat-value">{{ total_waste|floatformat:1 }} kg</div>
+            <div class="stat-label">Total Waste</div>
+            <div class="stat-detail">Edible: {{ edible_waste|floatformat:1 }} kg</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon icon-info"><i class="bi bi-arrow-down-circle-fill"></i></div>
+        <div class="stat-content">
+            <div class="stat-value">{{ waste_reduction_pct }}%</div>
+            <div class="stat-label">Waste Reduction</div>
+            <div class="stat-detail">vs baseline</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon icon-warning"><i class="bi bi-currency-rupee"></i></div>
+        <div class="stat-content">
+            <div class="stat-value">₹{{ cost_saved|floatformat:0 }}</div>
+            <div class="stat-label">Cost Saved</div>
+            <div class="stat-detail">via reduction</div>
+        </div>
+    </div>
+</div>
+
+<!-- Row 2: Secondary Metrics -->
+<div class="grid-4 mb-4">
+    <div class="stat-card">
+        <div class="stat-icon icon-primary"><i class="bi bi-robot"></i></div>
+        <div class="stat-content">
+            <div class="stat-value">{{ predicted_demand }}</div>
+            <div class="stat-label">Predicted Demand</div>
+            <div class="stat-detail">3-day average</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon icon-success"><i class="bi bi-gift-fill"></i></div>
+        <div class="stat-content">
+            <div class="stat-value">{{ total_surplus }}</div>
+            <div class="stat-label">Surplus Entries</div>
+            <div class="stat-detail">{{ collected_surplus }} collected</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon icon-warning"><i class="bi bi-exclamation-triangle-fill"></i></div>
+        <div class="stat-content">
+            <div class="stat-value">{{ expiring_items }}</div>
+            <div class="stat-label">Expiring Soon</div>
+            <div class="stat-detail">{{ expired_items }} expired</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon icon-secondary"><i class="bi bi-percent"></i></div>
+        <div class="stat-content">
+            <div class="stat-value">{{ inedible_waste|floatformat:1 }} kg</div>
+            <div class="stat-label">Inedible Waste</div>
+            <div class="stat-detail">disposed</div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts + Table -->
+<div class="grid-2">
+    <div>
+        <!-- Waste Trend Chart -->
+        <div class="modern-card mb-4">
+            <div class="card-header"><i class="bi bi-graph-down me-2 text-danger"></i>7-Day Waste Trend (kg)</div>
+            <div class="chart-container">
+                <canvas id="wasteChart" height="80"></canvas>
+            </div>
+        </div>
+        <!-- Recent Waste Logs -->
+        <div class="modern-card">
+            <div class="card-header"><i class="bi bi-clock-history me-2 text-primary"></i>Recent Waste Logs</div>
+            {% if recent_waste %}
+            <table class="modern-table">
+                <thead><tr><th>Food</th><th>Qty</th><th>Category</th><th>Date</th></tr></thead>
+                <tbody>
+                {% for log in recent_waste %}
+                <tr>
+                    <td class="fw-semibold">{{ log.food_name }}</td>
+                    <td>{{ log.quantity }} {{ log.unit }}</td>
+                    <td>
+                        {% if log.category == 'edible' %}
+                        <span class="badge badge-warning">Edible</span>
+                        {% else %}
+                        <span class="badge badge-secondary">Inedible</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ log.date }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="text-center py-4 text-muted">No waste logs yet.</div>
+            {% endif %}
+        </div>
+    </div>
+    <div>
+        <!-- Waste Breakdown -->
+        <div class="modern-card mb-4">
+            <div class="card-header"><i class="bi bi-pie-chart me-2 text-primary"></i>Waste Breakdown</div>
+            <div class="chart-container">
+                <canvas id="wasteBreakdown" height="120"></canvas>
+            </div>
+        </div>
+        <!-- Quick Actions -->
+        <div class="modern-card">
+            <div class="card-header"><i class="bi bi-lightning me-2 text-warning"></i>Quick Actions</div>
+            <div class="action-grid">
+                <a href="/waste/log/" class="action-card">
+                    <i class="bi bi-trash" style="background: #FEF2F2; color: var(--danger);"></i>
+                    Log Waste
+                </a>
+                <a href="/inventory/add/" class="action-card">
+                    <i class="bi bi-plus-circle" style="background: #ECFDF5; color: var(--success);"></i>
+                    Add Inventory
+                </a>
+                <a href="/surplus/add/" class="action-card">
+                    <i class="bi bi-gift" style="background: var(--accent-light); color: var(--accent-dark);"></i>
+                    Add Surplus
+                </a>
+                <a href="/dashboard/canteen/" class="action-card">
+                    <i class="bi bi-shop" style="background: #E0F2FE; color: var(--info);"></i>
+                    Canteen View
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Waste trend chart — Indigo themed
+new Chart(document.getElementById('wasteChart'), {
+    type: 'line',
+    data: {
+        labels: [{% for d in waste_trend %}"{{ d.date }}"{% if not forloop.last %},{% endif %}{% endfor %}],
+        datasets: [{
+            label: 'Waste (kg)',
+            data: [{% for d in waste_trend %}{{ d.quantity }}{% if not forloop.last %},{% endif %}{% endfor %}],
+            borderColor: '#4338CA',
+            backgroundColor: 'rgba(67, 56, 202, 0.08)',
+            tension: 0.4, fill: true,
+            pointBackgroundColor: '#4338CA',
+            pointRadius: 4
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+            y: { beginAtZero: true, grid: { color: '#F1F5F9' } },
+            x: { grid: { display: false } }
+        }
+    }
+});
+
+// Waste breakdown — Indigo + Amber
+new Chart(document.getElementById('wasteBreakdown'), {
+    type: 'doughnut',
+    data: {
+        labels: ['Edible', 'Inedible'],
+        datasets: [{
+            data: [{{ edible_waste }}, {{ inedible_waste }}],
+            backgroundColor: ['#F59E0B', '#94A3B8'],
+            borderWidth: 0,
+            borderRadius: 4
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: { legend: { position: 'bottom', labels: { padding: 16, usePointStyle: true } } },
+        cutout: '65%'
+    }
+});
+</script>
+{% endblock %}

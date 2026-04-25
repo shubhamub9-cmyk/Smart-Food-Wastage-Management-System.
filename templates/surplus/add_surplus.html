@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}Add Surplus Food - SmartFood{% endblock %}
+{% block content %}
+<div class="form-card mt-4">
+    <div class="modern-card">
+        <div class="card-body">
+            <div class="d-flex align-items-center mb-4 pb-3" style="border-bottom: 2px solid var(--border-light);">
+                <div class="stat-icon me-3 icon-success">
+                    <i class="bi bi-gift fs-4"></i>
+                </div>
+                <div>
+                    <h3 class="m-0 fw-bold">Post Surplus Food</h3>
+                    <p class="text-muted small m-0 mt-1">List edible surplus for NGOs to claim and prevent waste.</p>
+                </div>
+            </div>
+            
+            <form method="post">
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="form-group mb-4">
+                    <label class="form-label">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.help_text %}<div class="small text-muted mt-2"><i class="bi bi-info-circle me-1"></i>{{ field.help_text }}</div>{% endif %}
+                    {% if field.errors %}<div class="text-danger small mt-1 fw-semibold"><i class="bi bi-exclamation-circle me-1"></i>{{ field.errors|striptags }}</div>{% endif %}
+                </div>
+                {% endfor %}
+                
+                <div class="d-flex gap-3 mt-5 pt-3" style="border-top: 1px solid var(--border-light);">
+                    <button type="submit" class="btn btn-primary flex-grow-1">
+                        <i class="bi bi-plus-circle me-2"></i>Post Surplus Entry
+                    </button>
+                    <a href="/surplus/" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

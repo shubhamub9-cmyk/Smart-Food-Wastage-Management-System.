@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% block title %}NGO Dashboard — SmartFood{% endblock %}
+{% block content %}
+<!-- Welcome Header -->
+<div class="page-header flex-between">
+    <div>
+        <h2>NGO Partner Dashboard ❤️</h2>
+        <p class="page-subtitle">Browse and request available surplus food for redistribution.</p>
+    </div>
+    <div class="page-header-actions">
+        <span class="badge badge-info" style="padding: 0.5rem 1rem; font-size: 0.8rem;">NGO Partner</span>
+    </div>
+</div>
+
+<!-- Stats -->
+<div class="grid-3 mb-4">
+    <div class="stat-card">
+        <div class="stat-icon icon-success"><i class="bi bi-gift-fill"></i></div>
+        <div class="stat-content">
+            <div class="stat-value">{{ available_surplus|length }}</div>
+            <div class="stat-label">Available Items</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon icon-warning"><i class="bi bi-clock-history"></i></div>
+        <div class="stat-content">
+            <div class="stat-value">{{ my_requests|length }}</div>
+            <div class="stat-label">My Requests</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon icon-primary"><i class="bi bi-heart-fill"></i></div>
+        <div class="stat-content">
+            <div class="stat-value">Impact</div>
+            <div class="stat-label">Community Helper</div>
+        </div>
+    </div>
+</div>
+
+<div class="grid-2">
+    <div>
+        <!-- Available Surplus -->
+        <div class="modern-card mb-4">
+            <div class="card-header">
+                <span><i class="bi bi-gift-fill me-2 text-success"></i>Available Surplus Food</span>
+            </div>
+            <div class="card-body">
+                {% if available_surplus %}
+                <div class="table-wrapper mb-0">
+                    <table class="modern-table">
+                        <thead><tr><th>Food Item</th><th>Quantity</th><th>Expiry</th><th>Notes</th><th>Action</th></tr></thead>
+                        <tbody>
+                        {% for item in available_surplus %}
+                        <tr>
+                            <td class="fw-semibold">{{ item.food_name }}</td>
+                            <td>{{ item.quantity }} {{ item.unit }}</td>
+                            <td>{{ item.expiry_date|default:"N/A" }}</td>
+                            <td class="text-muted small">{{ item.notes|default:"-" }}</td>
+                            <td>
+                                <a href="{% url 'request_surplus' item.id %}" class="btn btn-sm btn-success">
+                                    <i class="bi bi-hand-thumbs-up me-1"></i>Request
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-5 text-muted">
+                    <i class="bi bi-inbox fs-1"></i>
+                    <p class="mt-2">No surplus food available at the moment.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div>
+        <!-- My Requests -->
+        <div class="modern-card">
+            <div class="card-header">
+                <span><i class="bi bi-clock-history me-2 text-primary"></i>My Requests</span>
+            </div>
+            <div class="card-body">
+                {% if my_requests %}
+                <div class="table-wrapper mb-0">
+                    <table class="modern-table">
+                        <thead><tr><th>Food</th><th>Qty</th><th>Status</th><th>Requested</th></tr></thead>
+                        <tbody>
+                        {% for item in my_requests %}
+                        <tr>
+                            <td class="fw-semibold">{{ item.food_name }}</td>
+                            <td>{{ item.quantity }} {{ item.unit }}</td>
+                            <td>
+                                {% if item.status == 'requested' %}<span class="badge badge-warning">Requested</span>
+                                {% elif item.status == 'collected' %}<span class="badge badge-success">Collected</span>
+                                {% else %}<span class="badge badge-secondary">{{ item.status }}</span>{% endif %}
+                            </td>
+                            <td>{{ item.date_requested|date:"d M Y"|default:"N/A" }}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-4 text-muted">No requests made yet.</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

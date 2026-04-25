@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account — SmartFood</title>
+    {% load static %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+</head>
+<body>
+    <div class="auth-page">
+        <!-- Left: Branded Visual Panel -->
+        <div class="auth-visual">
+            <div class="auth-visual-content">
+                <div style="margin-bottom: 2rem;">
+                    <i class="bi bi-leaf-fill" style="font-size: 2.5rem; color: var(--accent);"></i>
+                </div>
+                <h2>Join the SmartFood<br>Community</h2>
+                <p>Create your account and start making a difference in reducing food waste on campus.</p>
+
+                <div class="auth-visual-features">
+                    <div class="auth-visual-feature">
+                        <i class="bi bi-person-check-fill"></i>
+                        <span>Students can book & manage meals</span>
+                    </div>
+                    <div class="auth-visual-feature">
+                        <i class="bi bi-shop"></i>
+                        <span>Canteen staff track inventory & waste</span>
+                    </div>
+                    <div class="auth-visual-feature">
+                        <i class="bi bi-heart-fill"></i>
+                        <span>NGOs receive surplus food donations</span>
+                    </div>
+                    <div class="auth-visual-feature">
+                        <i class="bi bi-shield-check"></i>
+                        <span>Admins monitor the entire ecosystem</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Register Form -->
+        <div class="auth-form-side">
+            <div class="auth-form-container">
+                <div class="auth-brand">
+                    <i class="bi bi-leaf-fill"></i> SmartFood
+                </div>
+                <h1 class="auth-title">Create your account</h1>
+                <p class="auth-subtitle">Fill in your details to get started</p>
+
+                {% if form.errors %}
+                <div class="modern-alert alert-error mb-3">
+                    <i class="bi bi-exclamation-octagon-fill"></i>
+                    <div>
+                        {% for field in form %}{% for error in field.errors %}{{ field.label }}: {{ error }}<br>{% endfor %}{% endfor %}
+                        {% for error in form.non_field_errors %}{{ error }}<br>{% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <form method="post" class="auth-form">
+                    {% csrf_token %}
+                    <div class="grid-2" style="gap: 1rem;">
+                        <div class="form-group">
+                            <label class="form-label">Username *</label>
+                            <input type="text" name="username" class="form-control" placeholder="Choose a username" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email *</label>
+                            <input type="email" name="email" class="form-control" placeholder="you@example.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">First Name</label>
+                            <input type="text" name="first_name" class="form-control" placeholder="First name">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Last Name</label>
+                            <input type="text" name="last_name" class="form-control" placeholder="Last name">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Password *</label>
+                            <input type="password" name="password1" class="form-control" placeholder="Create password" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Confirm Password *</label>
+                            <input type="password" name="password2" class="form-control" placeholder="Confirm password" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Role *</label>
+                            <select name="role" id="id_role" class="form-select" required>
+                                <option value="student">Student</option>
+                                <option value="canteen">Canteen</option>
+                                <option value="hostel">Hostel</option>
+                                <option value="mess">Mess</option>
+                                <option value="hotel">Hotel</option>
+                                <option value="restaurant">Restaurant</option>
+                                <option value="temple">Temple</option>
+                                <option value="ngo">NGO</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Phone</label>
+                            <input type="text" name="phone" class="form-control" placeholder="Phone number">
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Field Groups -->
+                    <div id="student_fields" class="dynamic-group">
+                        <div class="form-group">
+                            <label class="form-label">Select Campus Provider * <span class="text-muted small">(for Students)</span></label>
+                            {{ form.provider_selection }}
+                        </div>
+                    </div>
+
+                    <div id="provider_fields" class="dynamic-group" style="display: none;">
+                        <div class="grid-2" style="gap: 1rem;">
+                            <div class="form-group">
+                                <label class="form-label">Provider Name *</label>
+                                <input type="text" name="provider_name" class="form-control" placeholder="e.g. Main Kitchen">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Location</label>
+                                <input type="text" name="provider_location" class="form-control" placeholder="Campus / City">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="ngo_fields" class="dynamic-group" style="display: none;">
+                        <div class="form-group">
+                            <label class="form-label">Organization Name * <span class="text-muted small">(for NGOs)</span></label>
+                            <input type="text" name="organization" class="form-control" placeholder="Food Rescue NGO">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg btn-block mt-4">
+                        <i class="bi bi-person-plus me-2"></i>Create Account
+                    </button>
+                </form>
+
+
+                <div class="auth-footer">
+                    Already have an account? <a href="/users/login/">Sign in</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dynamic Form JS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const roleSelect = document.getElementById('id_role');
+            const studentFields = document.getElementById('student_fields');
+            const providerFields = document.getElementById('provider_fields');
+            const ngoFields = document.getElementById('ngo_fields');
+
+            const providerRoles = ['canteen', 'hostel', 'mess', 'hotel', 'restaurant', 'temple'];
+
+            function updateFields() {
+                const role = roleSelect.value;
+                
+                // Reset standard display
+                studentFields.style.display = 'none';
+                providerFields.style.display = 'none';
+                ngoFields.style.display = 'none';
+                
+                if (role === 'student') {
+                    studentFields.style.display = 'block';
+                    studentFields.style.animation = 'fadeUp 0.3s ease forwards';
+                } else if (providerRoles.includes(role)) {
+                    providerFields.style.display = 'block';
+                    providerFields.style.animation = 'fadeUp 0.3s ease forwards';
+                } else if (role === 'ngo') {
+                    ngoFields.style.display = 'block';
+                    ngoFields.style.animation = 'fadeUp 0.3s ease forwards';
+                }
+            }
+
+            roleSelect.addEventListener('change', updateFields);
+            updateFields(); // Initialize on load
+        });
+    </script>
+</body>
+</html>

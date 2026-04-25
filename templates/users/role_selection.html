@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% block title %}Finishing Onboarding — SmartFood{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center mb-5">
+            <h1 class="fw-bold">Welcome to SmartFood! 👋</h1>
+            <p class="text-muted fs-5">Just one last step to get you started. Please tell us how you'll be using the platform.</p>
+        </div>
+    </div>
+
+    <form method="post" id="roleForm">
+        {% csrf_token %}
+        <div class="row g-4 justify-content-center">
+            <!-- Student Option -->
+            <div class="col-md-4">
+                <input type="radio" name="role" value="student" id="role_student" class="btn-check" required>
+                <label class="modern-card h-100 p-4 text-center cursor-pointer w-100" for="role_student">
+                    <div class="stat-icon icon-primary mx-auto mb-3"><i class="bi bi-mortarboard-fill"></i></div>
+                    <h3 class="h4">Student</h3>
+                    <p class="text-muted small">I want to book meals and report kitchen waste.</p>
+                </label>
+            </div>
+
+            <!-- Provider Option -->
+            <div class="col-md-4">
+                <input type="radio" name="role" value="canteen" id="role_provider" class="btn-check">
+                <label class="modern-card h-100 p-4 text-center cursor-pointer w-100" for="role_provider">
+                    <div class="stat-icon icon-success mx-auto mb-3"><i class="bi bi-shop"></i></div>
+                    <h3 class="h4">Provider</h3>
+                    <p class="text-muted small">I run a canteen, hostel, or mess and want to manage inventory.</p>
+                </label>
+            </div>
+
+            <!-- NGO Option -->
+            <div class="col-md-4">
+                <input type="radio" name="role" value="ngo" id="role_ngo" class="btn-check">
+                <label class="modern-card h-100 p-4 text-center cursor-pointer w-100" for="role_ngo">
+                    <div class="stat-icon icon-warning mx-auto mb-3"><i class="bi bi-heart-fill"></i></div>
+                    <h3 class="h4">NGO / Charity</h3>
+                    <p class="text-muted small">I want to collect surplus food for those in need.</p>
+                </label>
+            </div>
+        </div>
+
+        <!-- Dynamic Fields -->
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-6">
+                <!-- NGO Extra -->
+                <div id="ngo_extra" class="dynamic-auth-field" style="display: none;">
+                    <div class="modern-card p-4">
+                        <label class="form-label fw-bold">Organization Name</label>
+                        <input type="text" name="organization" class="form-control" placeholder="Enter your NGO name">
+                    </div>
+                </div>
+
+                <!-- Student Extra -->
+                <div id="student_extra" class="dynamic-auth-field" style="display: none;">
+                    <div class="modern-card p-4">
+                        <label class="form-label fw-bold">Select Your Hostel/Mess</label>
+                        <select name="food_provider" class="form-select">
+                            <option value="">-- Choose Option --</option>
+                            {% for provider in campus_providers %}
+                            <option value="{{ provider.id }}">{{ provider.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <div class="form-text text-muted mt-2">This helps us track your meal bookings accurately.</div>
+                    </div>
+                </div>
+
+                <!-- Provider Extra -->
+                <div id="provider_extra" class="dynamic-auth-field" style="display: none;">
+                    <div class="modern-card p-4">
+                        <label class="form-label fw-bold">Provider Type</label>
+                        <select name="role_provider_type" class="form-select" id="providerTypeSelect">
+                            <option value="canteen">Canteen</option>
+                            <option value="hostel">Hostel</option>
+                            <option value="mess">Mess</option>
+                            <option value="hotel">Hotel</option>
+                            <option value="restaurant">Restaurant</option>
+                        </select>
+                        <div class="form-text text-muted mt-2">Specify your establishment type.</div>
+                    </div>
+                </div>
+
+                <div class="mt-4 text-center">
+                    <button type="submit" class="btn btn-primary btn-lg px-5">
+                        Start Using SmartFood <i class="bi bi-arrow-right-short ms-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<style>
+    .btn-check + .modern-card {
+        border: 2px solid transparent;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .btn-check:checked + .modern-card {
+        border-color: var(--primary);
+        background: rgba(var(--primary-rgb), 0.02);
+        transform: translateY(-5px);
+        box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+    }
+    .cursor-pointer { cursor: pointer; }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const roles = document.querySelectorAll('input[name="role"]');
+        const ngoExtra = document.getElementById('ngo_extra');
+        const studentExtra = document.getElementById('student_extra');
+        const providerExtra = document.getElementById('provider_extra');
+        const providerTypeSelect = document.getElementById('providerTypeSelect');
+
+        roles.forEach(radio => {
+            radio.addEventListener('change', function() {
+                // Hide all
+                ngoExtra.style.display = 'none';
+                studentExtra.style.display = 'none';
+                providerExtra.style.display = 'none';
+
+                if (this.value === 'ngo') ngoExtra.style.display = 'block';
+                else if (this.value === 'student') studentExtra.style.display = 'block';
+                else if (['canteen', 'hostel', 'mess', 'hotel', 'restaurant'].includes(this.value) || this.id === 'role_provider') {
+                    providerExtra.style.display = 'block';
+                }
+            });
+        });
+
+        // Sync main 'role' value if provider types are changed
+        providerTypeSelect.addEventListener('change', function() {
+            if (document.getElementById('role_provider').checked) {
+                document.getElementById('role_provider').value = this.value;
+            }
+        });
+    });
+</script>
+{% endblock %}

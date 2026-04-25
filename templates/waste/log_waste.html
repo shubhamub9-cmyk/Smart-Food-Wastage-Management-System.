@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}Log Waste - SmartFood{% endblock %}
+{% block content %}
+<div class="form-card mt-4">
+    <div class="modern-card">
+        <div class="card-body">
+            <div class="d-flex align-items-center mb-4 pb-3" style="border-bottom: 2px solid var(--border-light);">
+                <div class="stat-icon me-3 icon-danger">
+                    <i class="bi bi-trash fs-4"></i>
+                </div>
+                <div>
+                    <h3 class="m-0 fw-bold">Log Food Waste</h3>
+                    <p class="text-muted small m-0 mt-1">Record disposal and instantly route edible items to NGOs.</p>
+                </div>
+            </div>
+            
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="form-group mb-4">
+                    <label class="form-label">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.help_text %}<div class="small text-muted mt-2"><i class="bi bi-info-circle me-1"></i>{{ field.help_text }}</div>{% endif %}
+                    {% if field.errors %}<div class="text-danger small mt-1 fw-semibold"><i class="bi bi-exclamation-circle me-1"></i>{{ field.errors|striptags }}</div>{% endif %}
+                </div>
+                {% endfor %}
+                
+                <div class="d-flex gap-3 mt-5 pt-3" style="border-top: 1px solid var(--border-light);">
+                    <button type="submit" class="btn btn-danger flex-grow-1">
+                        <i class="bi bi-check2-circle me-2"></i>Submit Waste Log
+                    </button>
+                    <a href="/waste/" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

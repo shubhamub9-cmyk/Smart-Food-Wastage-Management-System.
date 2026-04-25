@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}Inventory — SmartFood{% endblock %}
+{% block content %}
+<div class="page-header flex-between">
+    <div>
+        <h2>Inventory Management 📦</h2>
+        <p class="page-subtitle">Track and manage food inventory items.</p>
+    </div>
+    <div class="page-header-actions">
+        <a href="/inventory/add/" class="btn btn-primary"><i class="bi bi-plus-circle me-1"></i>Add Item</a>
+    </div>
+</div>
+
+{% if expired %}
+<div class="modern-alert alert-error mb-4">
+    <i class="bi bi-exclamation-triangle-fill"></i>
+    <div><strong>{{ expired|length }} item(s) have expired</strong> and should be disposed of immediately.</div>
+</div>
+{% endif %}
+
+{% if expiring_soon %}
+<div class="modern-alert alert-warning mb-4">
+    <i class="bi bi-clock-history"></i>
+    <div><strong>{{ expiring_soon|length }} item(s) expiring within 2 days!</strong></div>
+</div>
+{% endif %}
+
+<!-- Custom Tab Navigation -->
+<div class="tab-nav" id="inventoryTabs">
+    <button class="tab-link active" data-tab="all">All Items ({{ items|length }})</button>
+    <button class="tab-link" data-tab="expired" style="color: var(--danger);">Expired ({{ expired|length }})</button>
+    <button class="tab-link" data-tab="expiring" style="color: var(--accent-dark);">Expiring Soon ({{ expiring_soon|length }})</button>
+    <button class="tab-link" data-tab="good" style="color: var(--success);">Good ({{ good_items|length }})</button>
+</div>
+
+<div id="tab-all" class="tab-pane active">
+    {% include 'inventory/_table.html' with items=items %}
+</div>
+<div id="tab-expired" class="tab-pane">
+    {% include 'inventory/_table.html' with items=expired %}
+</div>
+<div id="tab-expiring" class="tab-pane">
+    {% include 'inventory/_table.html' with items=expiring_soon %}
+</div>
+<div id="tab-good" class="tab-pane">
+    {% include 'inventory/_table.html' with items=good_items %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Custom Tab System
+document.querySelectorAll('.tab-link').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-link').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+});
+</script>
+{% endblock %}

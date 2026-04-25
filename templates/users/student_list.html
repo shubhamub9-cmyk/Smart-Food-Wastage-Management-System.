@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}Registered Students — SmartFood{% endblock %}
+{% block content %}
+<div class="page-header flex-between">
+    <div>
+        <h2>Registered Students 👥</h2>
+        <p class="page-subtitle">List of students registered with <strong>{{ provider.name }}</strong></p>
+    </div>
+    <a href="{% url 'dashboard' %}" class="btn btn-outline btn-sm">
+        <i class="bi bi-arrow-left me-1"></i>Back to Dashboard
+    </a>
+</div>
+
+<div class="modern-card">
+    <div class="card-header">
+        <span><i class="bi bi-people me-2 text-primary"></i>Student Directory</span>
+        <span class="badge badge-info">{{ students|length }} Total</span>
+    </div>
+    {% if students %}
+    <div class="table-responsive">
+        <table class="modern-table">
+            <thead>
+                <tr>
+                    <th>Student Name</th>
+                    <th>Email Address</th>
+                    <th>Phone</th>
+                    <th>Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for profile in students %}
+                <tr class="hover-row">
+                    <td>
+                        <div class="fw-bold">{{ profile.user.get_full_name|default:profile.user.username }}</div>
+                        <div class="small text-muted">@{{ profile.user.username }}</div>
+                    </td>
+                    <td><a href="mailto:{{ profile.user.email }}" class="text-decoration-none">{{ profile.user.email }}</a></td>
+                    <td>{{ profile.phone|default:"—" }}</td>
+                    <td><span class="badge" style="background: rgba(67, 56, 202, 0.1); color: var(--primary);">Student</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="text-center py-5 text-muted">
+        <i class="bi bi-people fs-1"></i>
+        <p class="mt-2">No students registered yet.</p>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+    .hover-row:hover {
+        background-color: rgba(67, 56, 202, 0.02);
+        transition: background-color 0.3s ease;
+    }
+    .table-responsive {
+        overflow-x: auto;
+    }
+</style>
+{% endblock %}

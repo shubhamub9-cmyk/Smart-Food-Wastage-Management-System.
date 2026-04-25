@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+{% block title %}Waste Log — SmartFood{% endblock %}
+{% block content %}
+<div class="page-header flex-between">
+    <div>
+        <h2>Food Waste Log 🗑️</h2>
+        <p class="page-subtitle">Track and analyze food waste patterns.</p>
+    </div>
+    <div class="page-header-actions">
+        <a href="/waste/log/" class="btn btn-primary"><i class="bi bi-plus-circle me-1"></i>Log Waste</a>
+    </div>
+</div>
+
+<!-- Stat Cards -->
+<div class="grid-3 mb-4">
+    <div class="stat-card">
+        <div class="stat-icon icon-danger"><i class="bi bi-trash-fill"></i></div>
+        <div class="stat-content">
+            <div class="stat-value">{{ total_waste|floatformat:2 }} kg</div>
+            <div class="stat-label">Total Waste</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon icon-warning"><i class="bi bi-exclamation-triangle-fill"></i></div>
+        <div class="stat-content">
+            <div class="stat-value">{{ edible_waste|floatformat:2 }} kg</div>
+            <div class="stat-label">Edible Waste</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon icon-secondary"><i class="bi bi-x-circle-fill"></i></div>
+        <div class="stat-content">
+            <div class="stat-value">{{ inedible_waste|floatformat:2 }} kg</div>
+            <div class="stat-label">Inedible Waste</div>
+        </div>
+    </div>
+</div>
+
+<div class="grid-2">
+    <div>
+        <!-- 7-Day Trend -->
+        <div class="modern-card mb-4">
+            <div class="card-header"><i class="bi bi-graph-down me-2 text-danger"></i>7-Day Waste Trend</div>
+            <div class="chart-container">
+                <canvas id="wasteTrend" height="80"></canvas>
+            </div>
+        </div>
+        <!-- All Logs -->
+        <div class="modern-card">
+            <div class="card-header"><i class="bi bi-list-ul me-2 text-primary"></i>All Waste Logs</div>
+            {% if logs %}
+            <table class="modern-table">
+                <thead><tr><th>Food</th><th>Quantity</th><th>Category</th><th>Date</th><th>Logged By</th><th>Image</th><th></th></tr></thead>
+                <tbody>
+                {% for log in logs %}
+                <tr>
+                    <td class="fw-semibold">{{ log.food_name }}</td>
+                    <td>{{ log.quantity }} {{ log.unit }}</td>
+                    <td>
+                        {% if log.category == 'edible' %}
+                        <span class="badge badge-warning">Edible</span>
+                        {% else %}
+                        <span class="badge badge-secondary">Inedible</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ log.date }}</td>
+                    <td class="text-muted small">{{ log.logged_by }}</td>
+                    <td>
+                        {% if log.image %}
+                        <a href="{{ log.image.url }}" target="_blank">
+                            <img src="{{ log.image.url }}" width="36" height="36" style="object-fit: cover; border-radius: 6px;">
+                        </a>
+                        {% else %}<span class="text-muted">—</span>{% endif %}
+                    </td>
+                    <td>
+                        <a href="/waste/delete/{{ log.id }}/" class="btn btn-sm btn-outline-danger"
+                           onclick="return confirm('Delete this waste log?')">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="text-center py-5 text-muted">
+                <i class="bi bi-check-circle-fill text-success fs-1"></i>
+                <p class="mt-2">No waste logged yet. Great job!</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <div>
+        <!-- Waste Breakdown -->
+        <div class="modern-card mb-4">
+            <div class="card-header"><i class="bi bi-pie-chart me-2 text-primary"></i>Insights</div>
+            <div class="chart-container">
+                <canvas id="wasteBreakdown" height="150"></canvas>
+            </div>
+            <div style="padding: 1rem;">
+                <div class="modern-alert alert-info py-2 mb-3">
+                    <i class="bi bi-lightbulb"></i>
+                    <div><strong>Tip:</strong> Reducing edible waste by 30% can save significant food resources.</div>
+                </div>
+                <a href="/surplus/add/" class="btn btn-outline btn-sm w-100">
+                    <i class="bi bi-gift me-1"></i>Convert to Surplus
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+new Chart(document.getElementById('wasteTrend'), {
+    type: 'bar',
+    data: {
+        labels: [{% for d in trend %}"{{ d.date }}"{% if not forloop.last %},{% endif %}{% endfor %}],
+        datasets: [{
+            label: 'Waste (kg)',
+            data: [{% for d in trend %}{{ d.quantity }}{% if not forloop.last %},{% endif %}{% endfor %}],
+            backgroundColor: 'rgba(67, 56, 202, 0.5)',
+            borderColor: '#4338CA',
+            borderWidth: 1,
+            borderRadius: 6
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+            y: { beginAtZero: true, grid: { color: '#F1F5F9' } },
+            x: { grid: { display: false } }
+        }
+    }
+});
+new Chart(document.getElementById('wasteBreakdown'), {
+    type: 'doughnut',
+    data: {
+        labels: ['Edible', 'Inedible'],
+        datasets: [{
+            data: [{{ edible_waste }}, {{ inedible_waste }}],
+            backgroundColor: ['#F59E0B', '#94A3B8'],
+            borderWidth: 0,
+            borderRadius: 4
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: { legend: { position: 'bottom', labels: { padding: 16, usePointStyle: true } } },
+        cutout: '65%'
+    }
+});
+</script>
+{% endblock %}

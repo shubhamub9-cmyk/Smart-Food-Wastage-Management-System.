@@ -1,0 +1,262 @@
+{% extends "base_landing.html" %}
+{% load static %}
+
+{% block content %}
+<!-- 1. Hero Section -->
+<section class="hero-section flex-column flex-center">
+    <div class="hero-mesh"></div>
+    <div class="app-container">
+        <div class="hero-grid animate-on-scroll">
+            <div class="text-left">
+                <span class="badge badge-info mb-4">
+                    🚀 Smart Food Manager 2.0 is Live
+                </span>
+                <h1 class="hero-title">
+                    Reducing Food Waste with <span>Smart Technology</span>
+                </h1>
+                <p class="section-subtitle mb-4 text-left" style="margin-left: 0;">
+                    A smart system that connects students, food providers, and NGOs to minimize food waste and improve food distribution across campus ecosystems.
+                </p>
+                <div class="flex-center gap-4 mt-4" style="justify-content: flex-start;">
+                    {% if user.is_authenticated %}
+                        <a href="/dashboard/" class="btn btn-primary btn-lg">Go to Dashboard <i class="bi bi-arrow-right"></i></a>
+                    {% else %}
+                        <a href="{% url 'register' %}" class="btn btn-primary btn-lg">Get Started <i class="bi bi-arrow-right"></i></a>
+                        <a href="{% url 'login' %}" class="btn btn-secondary btn-lg">Login to Portal</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="hero-image-container">
+                <img src="{% static 'img/hero.png' %}" alt="Smart Food Dashboard">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Trust Bar -->
+<div class="trust-bar">
+    <div class="app-container">
+        <div class="trust-grid animate-on-scroll">
+            <div class="trust-item"><i class="bi bi-buildings"></i> Institutional Cafeterias</div>
+            <div class="trust-item"><i class="bi bi-hospital"></i> Corporate Hostels</div>
+            <div class="trust-item"><i class="bi bi-shop"></i> Premium Restaurants</div>
+            <div class="trust-item"><i class="bi bi-bank"></i> Community Temples</div>
+        </div>
+    </div>
+</div>
+<section class="landing-section bg-white" id="problem">
+    <div class="app-container">
+        <div class="text-center animate-on-scroll">
+            <h2 class="section-title">The Global Food Crisis</h2>
+            <p class="section-subtitle">Food waste is a systemic failure in institutional dining. From colleges to hotels, massive quantities of perfectly edible food are discarded daily.</p>
+        </div>
+        
+        <div class="grid-4 mt-4 animate-on-scroll">
+            <div class="feature-card text-center" style="border: none; background: #FFF7ED;">
+                <div class="impact-number" style="color: #EA580C; font-size: 2.5rem;">30%</div>
+                <p class="small font-weight-bold">Food Wasted Daily</p>
+                <p class="text-muted small">In hostels & hotels due to lack of planning.</p>
+            </div>
+            <div class="feature-card text-center" style="border: none; background: #F0FDFA;">
+                <div class="impact-number" style="color: #0D9488; font-size: 2.5rem;">Zero</div>
+                <p class="small font-weight-bold">Demand Planning</p>
+                <p class="text-muted small">Kitchens cook without knowing who will show up.</p>
+            </div>
+            <div class="feature-card text-center" style="border: none; background: #FEF2F2;">
+                <div class="impact-number" style="color: #DC2626; font-size: 2.5rem;">Methane</div>
+                <p class="small font-weight-bold">Climate Impact</p>
+                <p class="text-muted small">Waste in landfills generates harmful greenhouse gases.</p>
+            </div>
+            <div class="feature-card text-center" style="border: none; background: #F5F3FF;">
+                <div class="impact-number" style="color: #7C3AED; font-size: 2.5rem;">No Link</div>
+                <p class="small font-weight-bold">NGO Gap</p>
+                <p class="text-muted small">Surplus food exists but never reaches those in need.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 3. Our Solution -->
+<section class="landing-section" id="solution" style="background: var(--bg-main);">
+    <div class="app-container">
+        <div class="solution-grid animate-on-scroll">
+            <div class="solution-image">
+                <img src="{% static 'img/solution.png' %}" alt="Our Solution" style="width: 100%; border-radius: var(--radius-lg); box-shadow: var(--shadow-md);">
+            </div>
+            <div class="solution-content">
+                <span class="badge badge-info mb-3">How we fix it</span>
+                <h2 class="section-title" style="text-align: left; margin-bottom: 2rem;">A Unified Intelligence Platform</h2>
+                
+                <div class="mb-4">
+                    <h4><i class="bi bi-check-circle-fill"></i> Pre-Booked Meals</h4>
+                    <p class="text-muted">Students book meals within a time window, giving providers the exact quantity needed, eliminating "guesstimate" waste.</p>
+                </div>
+                <div class="mb-4">
+                    <h4><i class="bi bi-check-circle-fill"></i> Real-Time Coordination</h4>
+                    <p class="text-muted">Instant communication between Canteens and NGOs ensures that any unavoidable surplus is claimed within minutes.</p>
+                </div>
+                <div>
+                    <h4><i class="bi bi-check-circle-fill"></i> Waste Analytics</h4>
+                    <p class="text-muted">Providers track exactly where waste happens—allowing them to optimize menus and reduce costs significantly.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 4. Features Section -->
+<section class="landing-section" id="features">
+    <div class="app-container">
+        <div class="text-center animate-on-scroll">
+            <h2 class="section-title">Core Platform Features</h2>
+            <p class="section-subtitle">Everything you need to run a zero-waste institutional kitchen.</p>
+        </div>
+
+        <div class="grid-3 animate-on-scroll mt-4">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="bi bi-calendar2-check"></i></div>
+                <h3 class="fs-4">Smart Meal Booking</h3>
+                <p class="text-muted">Students pre-book specific meals precisely shaping canteen production with strict time-window enforcement.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon" style="background: var(--accent-light); color: var(--accent-dark);"><i class="bi bi-graph-up-arrow"></i></div>
+                <h3 class="fs-4">Demand Forecasting</h3>
+                <p class="text-muted">Advanced analytics foresee meal counts to prevent over-purchasing and ingredients spoilage.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon" style="background: #F1F5F9; color: var(--secondary);"><i class="bi bi-box-seam"></i></div>
+                <h3 class="fs-4">Inventory Management</h3>
+                <p class="text-muted">Track stock levels in real-time and receive alerts for ingredient expirations and low stock.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon" style="background: #FEF2F2; color: var(--danger);"><i class="bi bi-pie-chart"></i></div>
+                <h3 class="fs-4">Waste Tracking</h3>
+                <p class="text-muted">Log and categorize waste (edible vs inedible) to identify production inefficiencies.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon" style="background: #ECFDF5; color: var(--success);"><i class="bi bi-gift"></i></div>
+                <h3 class="fs-4">Surplus Distribution</h3>
+                <p class="text-muted">Instantly list unserved edible food for pickup by verified local charity organizations.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon" style="background: #F5F3FF; color: var(--primary);"><i class="bi bi-heart"></i></div>
+                <h3 class="fs-4">NGO Integration</h3>
+                <p class="text-muted">Dedicated portal for NGOs to view available surplus, claim items, and coordinate logistics.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 5. How It Works -->
+<section class="landing-section bg-white" id="workflow">
+    <div class="app-container">
+        <div class="text-center animate-on-scroll mb-5">
+            <h2 class="section-title">The Zero-Waste Loop</h2>
+            <p class="section-subtitle">Simple, automated, and effective coordination.</p>
+        </div>
+
+        <div class="grid-4 animate-on-scroll">
+            <div class="text-center">
+                <div class="step-number mx-auto">1</div>
+                <h5>Students Book</h5>
+                <p class="text-muted small">Meals booked in the allowed window.</p>
+            </div>
+            <div class="text-center">
+                <div class="step-number mx-auto">2</div>
+                <h5>Kitchen Prepares</h5>
+                <p class="text-muted small">Cooking based on exact demand.</p>
+            </div>
+            <div class="text-center">
+                <div class="step-number mx-auto">3</div>
+                <h5>Surplus Logged</h5>
+                <p class="text-muted small">Unsold food marked as available.</p>
+            </div>
+            <div class="text-center">
+                <div class="step-number mx-auto" style="background: var(--success);">4</div>
+                <h5>NGOs Redistribute</h5>
+                <p class="text-muted small">Food is collected and shared.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 6. Impact Metric Details -->
+<section class="landing-section" style="background: var(--secondary); color: white;" id="impact">
+    <div class="app-container text-center">
+        <h2 class="section-title" style="color: white;">Measurable Results</h2>
+        <p class="section-subtitle" style="color: #94A3B8;">Real impact through smart coordination.</p>
+        
+        <div class="grid-3 mt-4 animate-on-scroll">
+            <div class="p-4" style="border-right: 1px solid rgba(255,255,255,0.1);">
+                <div class="impact-number" style="color: white;">60%</div>
+                <div class="stat-label">Waste Reduction</div>
+            </div>
+            <div class="p-4" style="border-right: 1px solid rgba(255,255,255,0.1);">
+                <div class="impact-number" style="color: white;">25%</div>
+                <div class="stat-label">Cost Savings</div>
+            </div>
+            <div class="p-4">
+                <div class="impact-number" style="color: white;">100%</div>
+                <div class="stat-label">Transparency</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 7. User Roles -->
+<section class="landing-section bg-white" id="roles">
+    <div class="app-container">
+        <div class="text-center animate-on-scroll">
+            <h2 class="section-title">Ecosystem Stakeholders</h2>
+        </div>
+        <div class="grid-4 mt-4 animate-on-scroll">
+            <div class="modern-card">
+                <h4>Students</h4>
+                <p class="text-muted small">Preview menus and pre-book meals to ensure zero waste.</p>
+            </div>
+            <div class="modern-card">
+                <h4>Providers</h4>
+                <p class="text-muted small">Manage food production, inventory, and surplus redistribution.</p>
+            </div>
+            <div class="modern-card">
+                <h4>NGO Partners</h4>
+                <p class="text-muted small">Real-time alerts for available surplus collection.</p>
+            </div>
+            <div class="modern-card">
+                <h4>Admins</h4>
+                <p class="text-muted small">Oversee institution-wide waste reduction analytics.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 8. CTA Section -->
+<section class="landing-section text-center" style="background: var(--primary-light);">
+    <div class="app-container animate-on-scroll">
+        <h2 class="section-title" style="font-size: 3rem; color: var(--primary-dark);">Join the Movement</h2>
+        <p class="section-subtitle mt-2" style="color: var(--primary);">Join the thousands of institutions reducing their carbon footprint.</p>
+        <div class="flex-center gap-4 mt-4">
+            <a href="{% url 'register' %}" class="btn btn-primary btn-lg">Register Now</a>
+            <a href="{% url 'login' %}" class="btn btn-secondary btn-lg">Access Portal</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    window.addEventListener('scroll', () => {
+        const nav = document.getElementById('landingNav');
+        if (window.scrollY > 50) nav.classList.add('scrolled');
+        else nav.classList.remove('scrolled');
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add('is-visible');
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+</script>
+{% endblock %}

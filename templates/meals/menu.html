@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Menu - SmartFood{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h2>Weekly Menu 🥗</h2>
+    <p class="page-subtitle">Standardized meal patterns set by the provider for each day.</p>
+</div>
+
+<div class="grid-3">
+{% for menu in menus %}
+    <div class="modern-card">
+        <div class="card-header">
+            <strong>{{ menu.day }}</strong>
+            <span class="badge badge-info text-uppercase" style="font-size: 0.7rem; font-weight: 700; letter-spacing: 0.5px;">Schedule</span>
+        </div>
+        <div class="card-body">
+            <div class="mb-3 p-3 bg-light rounded" style="background: var(--bg-main) !important;">
+                <div class="small fw-bold text-muted mb-1 text-uppercase">🌅 Breakfast</div>
+                <div class="text-dark">{{ menu.breakfast|default:"Not set" }}</div>
+            </div>
+            <div class="mb-3 p-3 bg-light rounded" style="background: var(--bg-main) !important;">
+                <div class="small fw-bold text-muted mb-1 text-uppercase">☀️ Lunch</div>
+                <div class="text-dark">{{ menu.lunch|default:"Not set" }}</div>
+            </div>
+            <div class="p-3 bg-light rounded" style="background: var(--bg-main) !important;">
+                <div class="small fw-bold text-muted mb-1 text-uppercase">🌙 Dinner</div>
+                <div class="text-dark">{{ menu.dinner|default:"Not set" }}</div>
+            </div>
+        </div>
+    </div>
+{% empty %}
+    <div class="modern-card text-center py-5" style="grid-column: 1 / -1;">
+        <div class="text-muted" style="font-size: 3rem;"><i class="bi bi-journal-x"></i></div>
+        <h4 class="mt-3 fw-bold">No Menu Available</h4>
+        <p class="text-muted">The provider hasn't updated the weekly menu yet.</p>
+    </div>
+{% endfor %}
+</div>
+
+<div class="mt-5 pt-3" style="border-top: 1px solid var(--border-light);">
+    <a href="/meals/book/" class="btn btn-primary"><i class="bi bi-calendar-plus me-2"></i>Proceed to Booking</a>
+</div>
+{% endblock %}

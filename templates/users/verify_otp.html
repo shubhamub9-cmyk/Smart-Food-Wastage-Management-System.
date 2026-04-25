@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}Verify Your Email — SmartFood{% endblock %}
+{% block content %}
+<div class="row justify-content-center py-5">
+    <div class="col-md-5">
+        <div class="modern-card p-4 p-md-5 text-center">
+            <div class="stat-icon icon-primary mx-auto mb-4" style="width: 80px; height: 80px; font-size: 2rem;">
+                <i class="bi bi-shield-lock-fill"></i>
+            </div>
+            
+            <h2 class="fw-bold mb-2">Two-Step Verification</h2>
+            <p class="text-muted mb-4">We've sent a 6-digit verification code to <br><strong class="text-dark">{{ email }}</strong></p>
+            
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-4">
+                    <input type="text" name="otp" class="form-control form-control-lg text-center fw-bold fs-2 tracking-widest" 
+                           placeholder="000000" maxlength="6" pattern="\d{6}" required autofocus>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">
+                    Verify Code <i class="bi bi-check-circle ms-2"></i>
+                </button>
+            </form>
+            
+            <div class="mt-4">
+                <p class="text-muted small mb-1">Didn't receive the code?</p>
+                <a href="{% url 'resend_otp' %}" class="text-decoration-none fw-semibold">Resend OTP</a>
+            </div>
+            
+            <hr class="my-4 opacity-50">
+            
+            <a href="{% url 'login' %}" class="text-muted small text-decoration-none">
+                <i class="bi bi-arrow-left me-1"></i> Back to Login
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .tracking-widest { letter-spacing: 0.5rem; }
+    input:focus { letter-spacing: 0.5rem; }
+</style>
+{% endblock %}
