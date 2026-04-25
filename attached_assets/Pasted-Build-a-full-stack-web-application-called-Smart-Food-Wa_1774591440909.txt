@@ -1,0 +1,225 @@
+Build a full-stack web application called **"Smart Food Wastage Management System"** using **Django (Python backend)** and **HTML, CSS, JavaScript (frontend with Bootstrap)**.
+
+The application should be designed for educational institutions (canteens, hostels, mess) to reduce food wastage using demand prediction, waste tracking, inventory management, and surplus food redistribution.
+
+---
+
+### ⚙️ TECH STACK
+
+* Backend: Django (Python)
+* Database: SQLite (default Django DB)
+* Frontend: HTML, CSS, Bootstrap, JavaScript (no React)
+* Use Django templates for rendering pages
+* Use Django built-in authentication system
+
+---
+
+### 🧱 PROJECT STRUCTURE
+
+Create Django apps with the following structure:
+
+* users (authentication and roles)
+* meals (student meal booking)
+* inventory (food stock management)
+* waste (waste logging system)
+* surplus (surplus food donation system)
+
+Include:
+
+* templates/ folder for HTML files
+* static/ folder for CSS/JS
+
+---
+
+### 👥 USER ROLES
+
+Implement basic roles:
+
+* Student
+* Admin/Canteen Staff
+* NGO (for surplus collection)
+
+Use Django authentication and assign roles via user model or groups.
+
+---
+
+### 🧩 FEATURES TO IMPLEMENT
+
+#### 1. 👨‍🎓 STUDENT MODULE
+
+* Register/Login/Logout
+* Book meals (Breakfast/Lunch/Dinner)
+* Select date for booking
+* View simple menu
+* Store booking in database
+
+Model:
+
+* user
+* date
+* meal_type
+* status
+
+---
+
+#### 2. 👨‍🍳 CANTEEN DASHBOARD
+
+* Show total number of meal bookings per day
+* Display:
+  "Prepare for X students today"
+* Simple demand prediction:
+
+  * Average of last 3 days bookings
+
+Example logic:
+avg_demand = total_bookings_last_3_days / 3
+
+Display prediction clearly on dashboard
+
+---
+
+#### 3. 📦 INVENTORY MANAGEMENT
+
+* Add food items (Rice, Vegetables, etc.)
+
+* Store:
+
+  * item name
+  * quantity
+  * expiry date
+
+* Show expiry alerts:
+  "⚠️ Item expiring tomorrow"
+
+(No real barcode scanner — simulate manually)
+
+---
+
+#### 4. 🗑️ WASTE LOGGING SYSTEM
+
+* Form to log daily food waste
+* Fields:
+
+  * food name
+  * quantity
+  * category (Edible / Inedible)
+  * date (auto)
+  * optional image upload
+
+Store in database
+
+---
+
+#### 5. 🍛 SURPLUS FOOD DONATION SYSTEM
+
+* Add surplus food entry
+
+* Fields:
+
+  * food name
+  * quantity
+  * status (Available / Requested / Collected)
+
+* NGO users can:
+
+  * View available food
+  * Request food
+
+* Status updates accordingly
+
+---
+
+#### 6. 📊 ADMIN DASHBOARD (IMPORTANT)
+
+Create a dashboard showing:
+
+* Total meals booked
+* Total food waste
+* Waste reduction percentage (mock calculation allowed)
+* Cost savings (simple formula)
+
+Example:
+cost_saved = reduced_waste * average_meal_cost
+
+* Show simple statistics using cards or tables
+
+---
+
+### 🤖 SMART FEATURES (SIMULATED AI)
+
+Implement simple logic to simulate intelligence:
+
+1. Demand Prediction:
+
+* Average of last 3 days bookings
+
+2. Waste Insights:
+
+* Show total waste
+* Show trends (basic)
+
+3. Alerts:
+
+* Expiry alerts for inventory
+
+---
+
+### 🎨 FRONTEND REQUIREMENTS
+
+* Use Bootstrap for styling
+* Clean, minimal UI
+* Responsive design
+* Use cards, tables, and simple dashboards
+* Green theme (eco-friendly look)
+
+---
+
+### 📄 PAGES REQUIRED
+
+* Login Page
+* Register Page
+* Student Meal Booking Page
+* Canteen Dashboard Page
+* Inventory Management Page
+* Waste Logging Page
+* Surplus Food Page
+* Admin Dashboard
+
+---
+
+### 🔐 SECURITY
+
+* Only logged-in users can access features
+* Role-based access (students vs admin vs NGO)
+
+---
+
+### ⚡ ADDITIONAL REQUIREMENTS
+
+* Use Django Admin panel for managing data
+* Keep code clean and modular
+* Add comments for important logic
+* Ensure all features are functional (focus on working MVP)
+
+---
+
+### 🎯 GOAL
+
+The system should demonstrate:
+
+* Reduction of food waste
+* Smart demand prediction
+* Efficient food distribution
+* Simple but impactful analytics
+
+---
+
+Generate:
+
+* Full Django project setup
+* Models, views, templates, and URLs
+* Basic styling
+* Working CRUD operations for all modules
+
+Ensure the app runs locally with:
+python manage.py runserver
